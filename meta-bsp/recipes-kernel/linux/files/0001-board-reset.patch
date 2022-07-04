@@ -1,0 +1,24 @@
+Index: git/drivers/firmware/psci/psci.c
+===================================================================
+--- git.orig/drivers/firmware/psci/psci.c
++++ git/drivers/firmware/psci/psci.c
+@@ -250,6 +250,9 @@ static int get_set_conduit_method(struct
+ 	return 0;
+ }
+ 
++#define PSCI_SYSTEM_RESET2_AARCH64 0x4000012
++#define PSCI_RESET2_SYSTEM_BOARD_RESET 0x80000002
++
+ static void psci_sys_reset(enum reboot_mode reboot_mode, const char *cmd)
+ {
+ 	if ((reboot_mode == REBOOT_WARM || reboot_mode == REBOOT_SOFT) &&
+@@ -261,7 +264,8 @@ static void psci_sys_reset(enum reboot_m
+ 		 */
+ 		invoke_psci_fn(PSCI_FN_NATIVE(1_1, SYSTEM_RESET2), 0, 0, 0);
+ 	} else {
+-		invoke_psci_fn(PSCI_0_2_FN_SYSTEM_RESET, 0, 0, 0);
++		//invoke_psci_fn(PSCI_0_2_FN_SYSTEM_RESET, 0, 0, 0);
++		invoke_psci_fn(PSCI_SYSTEM_RESET2_AARCH64, PSCI_RESET2_SYSTEM_BOARD_RESET, 0, 0);
+ 	}
+ }
+ 
